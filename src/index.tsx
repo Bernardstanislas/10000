@@ -41,11 +41,27 @@ app.post("/game", async (c) => {
 	return c.render(<Game game={game} />);
 });
 
+app.post("/score", async (c) => {
+	const body = await c.req.parseBody();
+	const gameId = body.game;
+	if (typeof gameId !== "string") {
+		throw new Error("Invalid game id");
+	}
+	const scoreString = body.score;
+	if (typeof scoreString !== "string") {
+		throw new Error("Invalid score");
+	}
+	const score = parseInt(scoreString, 10);
+
+	const game = await gameService.addScore(gameId, score);
+	return c.render(<Game game={game} />);
+});
+
 app.get("/", async (c) => {
 	return c.render(
 		<>
 			<Game game={game} />
-			<Controls currentPlayer={game.currentPlayer.name} />
+			<Controls currentPlayer={game.currentPlayer.name} gameId={game.id} />
 		</>,
 	);
 });

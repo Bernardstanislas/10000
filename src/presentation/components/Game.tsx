@@ -9,7 +9,7 @@ export const Game: FC<Props> = ({ game }) => {
 		return Math.max(max, ladder.scoreMarks.length);
 	}, 0);
 	return (
-		<table>
+		<table id="game">
 			<tr>
 				{game.ladders.map((ladder) => {
 					return <th scope="col">{ladder.player.name}</th>;
