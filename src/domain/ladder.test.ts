@@ -63,6 +63,13 @@ describe("Ladder", () => {
 			ladder.addFailure();
 			expect(() => ladder.addScore(400)).toThrowError();
 		});
+
+		it("counts a failure when exceeding 10000", () => {
+			ladder.addScore(9500);
+			ladder.addScore(600);
+			expect(ladder.latestScoreMark.failures).toBe(1);
+			expect(ladder.latestScoreMark.score).toBe(9500);
+		});
 	});
 
 	it("can add a failure", () => {

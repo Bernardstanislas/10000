@@ -7,6 +7,7 @@ type ScoreMark = {
 };
 
 const MINIMUM_FIRST_SCORE = 500;
+const MAXIMUM_SCORE = 10000;
 
 export class Ladder {
 	readonly scoreMarks: ScoreMark[] = [
@@ -24,8 +25,11 @@ export class Ladder {
 		if (score <= 0) throw new Error("Score must be positive");
 		if (!this.rolling && score < MINIMUM_FIRST_SCORE)
 			throw new Error(`First score must be at least ${MINIMUM_FIRST_SCORE}`);
-
 		const newTotalScore = this.score + score;
+		if (newTotalScore > MAXIMUM_SCORE) {
+			this.addFailure();
+			return;
+		}
 		this.scoreMarks.push({
 			score: newTotalScore,
 			failures: 0,
