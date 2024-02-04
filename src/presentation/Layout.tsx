@@ -1,5 +1,6 @@
 import type { FC } from "hono/jsx";
 import { html } from "hono/html";
+import { ErrorInfo } from "./components/ErrorInfo";
 
 export const Layout: FC = (props) => {
 	return (
@@ -18,7 +19,10 @@ export const Layout: FC = (props) => {
 						}
 					  </style>`}
 			</head>
-			<body class="bg-neutral-300 container mx-auto">{props.children}</body>
+			<body class="bg-neutral-300 container mx-auto">
+				{props.children}
+				<ErrorInfo error="" />
+			</body>
 		</html>
 	);
 };

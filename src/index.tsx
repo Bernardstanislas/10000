@@ -6,6 +6,8 @@ import { Layout } from "./presentation/Layout";
 import { Game } from "./presentation/components/Game";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
+import { HTTPException } from "hono/http-exception";
+import { ErrorInfo } from "./presentation/components/ErrorInfo";
 
 const app = new Hono();
 
@@ -39,7 +41,7 @@ await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 
-app.use("*", async (c, next) => {
+app.use("", async (c, next) => {
 	c.setRenderer((content) => {
 		return c.html(<Layout>{content}</Layout>);
 	});
@@ -67,6 +69,11 @@ app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 
 app.get("/", async (c) => {
 	return c.render(<Game game={game} />);
+});
+
+app.onError((err, c) => {
+	c.header("HX-Retarget", "#error");
+	return c.render(<ErrorInfo error={err.message} />);
 });
 
 export default app;
