@@ -11,15 +11,24 @@ export class Game {
 
 	addScore(score: number) {
 		this.currentLadder.addScore(score);
-		this.currentPlayerIndex =
-			(this.currentPlayerIndex + 1) % this.ladders.length;
+		this.cyclePlayers();
+	}
+
+	addFailure() {
+		this.currentLadder.addFailure();
+		this.cyclePlayers();
 	}
 
 	get currentPlayer() {
 		return this.currentLadder.player;
 	}
 
-	private get currentLadder() {
+	get currentLadder() {
 		return this.ladders[this.currentPlayerIndex];
+	}
+
+	private cyclePlayers() {
+		this.currentPlayerIndex =
+			(this.currentPlayerIndex + 1) % this.ladders.length;
 	}
 }
