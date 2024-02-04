@@ -23,6 +23,11 @@ export const Layout: FC = (props) => {
 				{props.children}
 				<ErrorInfo error="" />
 			</body>
+			{html`<script>
+				htmx.on("htmx:beforeSend", function (event) {
+					document.getElementById("error").innerHTML = "";
+				});
+			</script>`}
 		</html>
 	);
 };
