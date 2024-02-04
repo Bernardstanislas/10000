@@ -12,6 +12,7 @@ export class Ladder {
 	constructor(readonly player: Player) {}
 
 	addScore(score: number) {
+		if (score % 100 !== 0) throw new Error("Score must be a multiple of 100");
 		this.scoreMarks.push({ score, fails: 0, cancelled: false });
 	}
 

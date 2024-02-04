@@ -23,6 +23,10 @@ describe("Ladder", () => {
 		expect(ladder.scoreMarks).toHaveLength(1);
 	});
 
+	it("can only add hunders", () => {
+		expect(() => ladder.addScore(99)).toThrowError();
+	});
+
 	it("can add a failure", () => {
 		ladder.addScore(100);
 		ladder.addFailure();
