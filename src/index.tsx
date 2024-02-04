@@ -5,11 +5,19 @@ import { Player } from "./domain/player";
 import { Layout } from "./presentation/Layout";
 import { Game } from "./presentation/components/Game";
 import { Controls } from "./presentation/components/Controls";
+import { z } from "zod";
+import { validator } from "hono/validator";
+import { zValidator } from "@hono/zod-validator";
 
 const app = new Hono();
 
 const gameRepository = new InMemoryGameRepository();
 const gameService = new GameService(gameRepository);
+
+const addScoreSchema = z.object({
+	game: z.string(),
+	score: z.string().pipe(z.coerce.number().min(100).max(10000)),
+});
 
 const bob = new Player("Bob");
 const alice = new Player("Alice");
@@ -41,19 +49,10 @@ app.post("/game", async (c) => {
 	return c.render(<Game game={game} />);
 });
 
-app.post("/score", async (c) => {
-	const body = await c.req.parseBody();
-	const gameId = body.game;
-	if (typeof gameId !== "string") {
-		throw new Error("Invalid game id");
-	}
-	const scoreString = body.score;
-	if (typeof scoreString !== "string") {
-		throw new Error("Invalid score");
-	}
-	const score = parseInt(scoreString, 10);
+app.post("/score", zValidator("form", addScoreSchema), async (c) => {
+	const { game: id, score } = c.req.valid("form");
 
-	const game = await gameService.addScore(gameId, score);
+	const game = await gameService.addScore(id, score);
 	return c.render(<Game game={game} />);
 });
 
