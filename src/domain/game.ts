@@ -1,12 +1,14 @@
 import { Ladder } from "./ladder";
 import type { Player } from "./player";
-
+import { v4 } from "uuid";
 export class Game {
 	readonly ladders: Ladder[];
 	private currentPlayerIndex = 0;
+	readonly id: string;
 
 	constructor(players: Player[]) {
 		this.ladders = players.map((player) => new Ladder(player));
+		this.id = v4();
 	}
 
 	addScore(score: number) {
