@@ -4,9 +4,7 @@ import { GameService } from "./domain/game.service";
 import { Player } from "./domain/player";
 import { Layout } from "./presentation/Layout";
 import { Game } from "./presentation/components/Game";
-import { Controls } from "./presentation/components/Controls";
 import { z } from "zod";
-import { validator } from "hono/validator";
 import { zValidator } from "@hono/zod-validator";
 
 const app = new Hono();
@@ -68,12 +66,7 @@ app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 });
 
 app.get("/", async (c) => {
-	return c.render(
-		<>
-			<Game game={game} />
-			<Controls currentPlayer={game.currentPlayer.name} gameId={game.id} />
-		</>,
-	);
+	return c.render(<Game game={game} />);
 });
 
 export default app;
