@@ -13,6 +13,7 @@ export class Ladder {
 
 	addScore(score: number) {
 		if (score % 100 !== 0) throw new Error("Score must be a multiple of 100");
+		if (score <= 0) throw new Error("Score must be positive");
 		this.scoreMarks.push({ score, fails: 0, cancelled: false });
 	}
 

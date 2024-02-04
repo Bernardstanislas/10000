@@ -18,13 +18,23 @@ describe("Ladder", () => {
 		expect(ladder.scoreMarks).toHaveLength(0);
 	});
 
-	it("can add a score", () => {
-		ladder.addScore(100);
-		expect(ladder.scoreMarks).toHaveLength(1);
-	});
+	describe("can add a score", () => {
+		it("of 100", () => {
+			ladder.addScore(100);
+			expect(ladder.latestScoreMark.score).toBe(100);
+		});
 
-	it("can only add hunders", () => {
-		expect(() => ladder.addScore(99)).toThrowError();
+		it("can only add hundreds", () => {
+			expect(() => ladder.addScore(99)).toThrowError();
+		});
+
+		it("cannot add 0 as a score", () => {
+			expect(() => ladder.addScore(0)).toThrowError();
+		});
+
+		it("cannot add a negative score", () => {
+			expect(() => ladder.addScore(-100)).toThrowError();
+		});
 	});
 
 	it("can add a failure", () => {
