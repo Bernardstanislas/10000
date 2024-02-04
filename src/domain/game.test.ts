@@ -50,4 +50,17 @@ describe("Game", () => {
 		game.addScore(200); // Bob scores
 		expect(game.currentLadder.score).toBe(0); // Bob has cancelled Alice's initial 800 score
 	});
+
+	it("finishes when a player reaches 10000", () => {
+		game.addScore(1000); // Bob scores
+		game.addScore(10000); // Alice scores
+		expect(game.finished).toBe(true);
+		expect(game.winner).toBe(alice);
+	});
+
+	it("can't add a score after the game has finished", () => {
+		game.addScore(10000); // Bob scores
+		expect(() => game.addScore(1000)).toThrowError();
+		expect(() => game.addFailure()).toThrowError();
+	});
 });
