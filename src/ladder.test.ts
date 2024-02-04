@@ -34,10 +34,10 @@ describe("Ladder", () => {
 		});
 	});
 
-	describe("can add a score", () => {
-		it("of 100", () => {
-			ladder.addScore(100);
-			expect(ladder.latestScoreMark.score).toBe(100);
+	describe("when adding a score", () => {
+		it("can add 600", () => {
+			ladder.addScore(600);
+			expect(ladder.latestScoreMark.score).toBe(600);
 		});
 
 		it("can only add hundreds", () => {
@@ -51,40 +51,44 @@ describe("Ladder", () => {
 		it("cannot add a negative score", () => {
 			expect(() => ladder.addScore(-100)).toThrowError();
 		});
+
+		it("must add at least 500 on the first score", () => {
+			expect(() => ladder.addScore(400)).toThrowError();
+		});
 	});
 
 	it("can add a failure", () => {
-		ladder.addScore(100);
+		ladder.addScore(1000);
 		ladder.addFailure();
-		expect(ladder.latestScoreMark.score).toBe(100);
+		expect(ladder.latestScoreMark.score).toBe(1000);
 		expect(ladder.latestScoreMark.failures).toBe(1);
 	});
 
 	describe("can compute the score", () => {
 		it("in an all winning scenario", () => {
+			ladder.addScore(1000);
 			ladder.addScore(100);
 			ladder.addScore(100);
-			ladder.addScore(100);
-			expect(ladder.score).toBe(300);
+			expect(ladder.score).toBe(1200);
 		});
 
 		it("in a mixed scenario", () => {
-			ladder.addScore(100);
-			ladder.addScore(100);
-			ladder.addFailure();
+			ladder.addScore(1000);
 			ladder.addScore(100);
 			ladder.addFailure();
-			expect(ladder.score).toBe(300);
+			ladder.addScore(100);
+			ladder.addFailure();
+			expect(ladder.score).toBe(1200);
 		});
 
 		it("in a mixed scenario with cancelled scores", () => {
-			ladder.addScore(100);
+			ladder.addScore(1000);
 			ladder.addScore(100);
 			ladder.addFailure();
 			ladder.addFailure();
 			ladder.addFailure();
 			ladder.addScore(100);
-			expect(ladder.score).toBe(200);
+			expect(ladder.score).toBe(1100);
 		});
 	});
 });
