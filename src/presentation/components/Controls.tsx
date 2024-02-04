@@ -11,7 +11,7 @@ export const Controls: FC<Props> = ({ currentPlayer, gameId }) => {
 			<h4>{currentPlayer}'s turn</h4>
 			<form>
 				<input type="hidden" name="game" value={gameId} />
-				<input type="number" name="score" />
+				<input type="number" name="score" min="100" step="100" />
 				<button
 					hx-post="/score"
 					hx-trigger="click"
