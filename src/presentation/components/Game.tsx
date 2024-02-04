@@ -9,6 +9,6 @@ type Props = {
 export const Game: FC<Props> = ({ game }) => (
 	<div id="game">
 		<Score game={game} />
-		<Controls currentPlayer={game.currentPlayer.name} gameId={game.id} />
+		<Controls game={game} />
 	</div>
 );

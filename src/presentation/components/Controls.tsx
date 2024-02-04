@@ -1,16 +1,25 @@
 import type { FC } from "hono/jsx";
+import type { Game } from "../../domain/game";
 
 type Props = {
-	currentPlayer: string;
-	gameId: string;
+	game: Game;
 };
 
-export const Controls: FC<Props> = ({ currentPlayer, gameId }) => {
+export const Controls: FC<Props> = ({ game }) => {
+	if (game.finished) {
+		return (
+			<div id="controls">
+				<h4>
+					<strong>{game.winner?.name}</strong> wins!
+				</h4>
+			</div>
+		);
+	}
 	return (
 		<div id="controls">
-			<h4>{currentPlayer}'s turn</h4>
+			<h4>{game.currentPlayer.name}'s turn</h4>
 			<form>
-				<input type="hidden" name="game" value={gameId} />
+				<input type="hidden" name="game" value={game.id} />
 				<input type="number" name="score" min="100" step="100" />
 				<button
 					hx-post="/score"

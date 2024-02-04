@@ -60,9 +60,7 @@ app.post("/score", zValidator("form", addScoreSchema), async (c) => {
 
 	const game = await gameService.addScore(id, score);
 	c.header("HX-Trigger", "update-score");
-	return c.render(
-		<Controls currentPlayer={game.currentPlayer.name} gameId={game.id} />,
-	);
+	return c.render(<Controls game={game} />);
 });
 
 app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
@@ -70,9 +68,7 @@ app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 
 	const game = await gameService.addFailure(id);
 	c.header("HX-Trigger", "update-score");
-	return c.render(
-		<Controls currentPlayer={game.currentPlayer.name} gameId={game.id} />,
-	);
+	return c.render(<Controls game={game} />);
 });
 
 app.get("/", async (c) => {
