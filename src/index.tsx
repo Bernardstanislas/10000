@@ -13,6 +13,8 @@ const gameService = new GameService(gameRepository);
 const bob = new Player("Bob");
 const alice = new Player("Alice");
 
+const game = await gameService.createGame([bob, alice]);
+
 app.use("*", async (c, next) => {
 	c.setRenderer((content) => {
 		return c.html(<Layout>{content}</Layout>);
@@ -25,8 +27,8 @@ app.post("/game", async (c) => {
 	return c.render(<Game game={game} />);
 });
 
-app.get("/", (c) => {
-	return c.text("Hello Hono!");
+app.get("/", async (c) => {
+	return c.render(<Game game={game} />);
 });
 
 export default app;

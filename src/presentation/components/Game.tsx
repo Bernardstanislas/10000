@@ -6,19 +6,22 @@ type Props = {
 };
 export const Game: FC<Props> = ({ game }) => {
 	return (
-		<ul>
-			{game.ladders.map((ladder) => {
-				return (
-					<li>
-						{ladder.player.name}:
-						<ul>
-							{ladder.scoreMarks.map((scoreMark) => {
-								return <li>{scoreMark.score}</li>;
-							})}
-						</ul>
-					</li>
-				);
-			})}
-		</ul>
+		<>
+			<h1>Game {game.id}</h1>
+			<ul>
+				{game.ladders.map((ladder) => {
+					return (
+						<li>
+							{ladder.player.name}:
+							<ul>
+								{ladder.scoreMarks.map((scoreMark) => {
+									return <li>{scoreMark.score}</li>;
+								})}
+							</ul>
+						</li>
+					);
+				})}
+			</ul>
+		</>
 	);
 };
