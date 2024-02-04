@@ -1,11 +1,34 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { Player } from "./player";
 import { Ladder } from "./ladder";
 
 describe("Ladder", () => {
+	const bob = new Player("Bob");
+	let ladder: Ladder;
+
+	beforeEach(() => {
+		ladder = new Ladder(bob);
+	});
+
 	it("can be created", () => {
-		const bob = new Player("Bob");
-		const ladder = new Ladder(bob);
 		expect(ladder).toBeDefined();
+	});
+
+	it("starts with an empty score marks array", () => {
+		expect(ladder.scoreMarks).toHaveLength(0);
+	});
+
+	it("can add a score", () => {
+		ladder.addScore(100);
+		expect(ladder.scoreMarks).toHaveLength(1);
+	});
+
+	describe("can compute the score", () => {
+		it("in an all winning scenario", () => {
+			ladder.addScore(100);
+			ladder.addScore(100);
+			ladder.addScore(100);
+			expect(ladder.score).toBe(300);
+		});
 	});
 });
