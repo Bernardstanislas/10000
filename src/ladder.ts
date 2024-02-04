@@ -15,11 +15,15 @@ export class Ladder {
 		this.scoreMarks.push({ score, fails: 0, cancelled: false });
 	}
 
+	addFailure() {
+		this.latestScoreMark.fails++;
+	}
+
 	get score() {
 		return this.scoreMarks.reduce((acc, scoreMark) => acc + scoreMark.score, 0);
 	}
 
-	private get latestScoreMark() {
+	get latestScoreMark() {
 		const activeScoreMarks = this.scoreMarks.filter(
 			(scoreMark) => !scoreMark.cancelled,
 		);

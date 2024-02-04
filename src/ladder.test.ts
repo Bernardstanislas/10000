@@ -23,6 +23,13 @@ describe("Ladder", () => {
 		expect(ladder.scoreMarks).toHaveLength(1);
 	});
 
+	it("can add a failure", () => {
+		ladder.addScore(100);
+		ladder.addFailure();
+		expect(ladder.latestScoreMark.score).toBe(100);
+		expect(ladder.latestScoreMark.fails).toBe(1);
+	});
+
 	describe("can compute the score", () => {
 		it("in an all winning scenario", () => {
 			ladder.addScore(100);
