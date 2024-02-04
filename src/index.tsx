@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { InMemoryGameRepository } from "./infra/game.in-memory.repository";
 import { GameService } from "./domain/game.service";
 import { Player } from "./domain/player";
+import { Layout } from "./presentation/Layout";
+import { Game } from "./presentation/components/Game";
 
 const app = new Hono();
 
@@ -11,9 +13,16 @@ const gameService = new GameService(gameRepository);
 const bob = new Player("Bob");
 const alice = new Player("Alice");
 
+app.use("*", async (c, next) => {
+	c.setRenderer((content) => {
+		return c.html(<Layout>{content}</Layout>);
+	});
+	await next();
+});
+
 app.post("/game", async (c) => {
 	const game = await gameService.createGame([bob, alice]);
-	return c.json(game);
+	return c.render(<Game game={game} />);
 });
 
 app.get("/", (c) => {
