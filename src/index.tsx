@@ -4,6 +4,7 @@ import { GameService } from "./domain/game.service";
 import { Player } from "./domain/player";
 import { Layout } from "./presentation/Layout";
 import { Game } from "./presentation/components/Game";
+import { Controls } from "./presentation/components/Controls";
 
 const app = new Hono();
 
@@ -41,7 +42,12 @@ app.post("/game", async (c) => {
 });
 
 app.get("/", async (c) => {
-	return c.render(<Game game={game} />);
+	return c.render(
+		<>
+			<Game game={game} />
+			<Controls currentPlayer={game.currentPlayer.name} />
+		</>,
+	);
 });
 
 export default app;
