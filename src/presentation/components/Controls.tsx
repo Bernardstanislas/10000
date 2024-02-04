@@ -21,7 +21,15 @@ export const Controls: FC<Props> = ({ currentPlayer, gameId }) => {
 				>
 					Add score
 				</button>
-				<button type="submit">Add failure</button>
+				<button
+					hx-post="/failure"
+					hx-trigger="click"
+					hx-target="#game"
+					hx-swap="outerHTML"
+					type="button"
+				>
+					Add failure
+				</button>
 			</form>
 		</>
 	);

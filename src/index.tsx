@@ -19,6 +19,10 @@ const addScoreSchema = z.object({
 	score: z.string().pipe(z.coerce.number().min(100).max(10000)),
 });
 
+const addFailureSchema = z.object({
+	game: z.string(),
+});
+
 const bob = new Player("Bob");
 const alice = new Player("Alice");
 
@@ -53,6 +57,13 @@ app.post("/score", zValidator("form", addScoreSchema), async (c) => {
 	const { game: id, score } = c.req.valid("form");
 
 	const game = await gameService.addScore(id, score);
+	return c.render(<Game game={game} />);
+});
+
+app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
+	const { game: id } = c.req.valid("form");
+
+	const game = await gameService.addFailure(id);
 	return c.render(<Game game={game} />);
 });
 
