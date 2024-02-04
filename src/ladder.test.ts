@@ -14,8 +14,24 @@ describe("Ladder", () => {
 		expect(ladder).toBeDefined();
 	});
 
-	it("starts with an empty score marks array", () => {
-		expect(ladder.scoreMarks).toHaveLength(0);
+	describe("initially", () => {
+		it("starts with a 0 filled score marks array", () => {
+			expect(ladder.scoreMarks).toHaveLength(1);
+		});
+
+		it("has a score of 0", () => {
+			expect(ladder.score).toBe(0);
+		});
+
+		it("does not count failures on the initial score mark", () => {
+			ladder.addFailure();
+			ladder.addFailure();
+			ladder.addFailure();
+			ladder.addFailure();
+			ladder.addFailure();
+			ladder.addFailure();
+			expect(ladder.latestScoreMark.failures).toBe(0);
+		});
 	});
 
 	describe("can add a score", () => {

@@ -7,7 +7,13 @@ type ScoreMark = {
 };
 
 export class Ladder {
-	readonly scoreMarks: ScoreMark[] = [];
+	readonly scoreMarks: ScoreMark[] = [
+		{
+			score: 0,
+			failures: 0,
+			cancelled: false,
+		},
+	];
 
 	constructor(readonly player: Player) {}
 
@@ -23,6 +29,7 @@ export class Ladder {
 	}
 
 	addFailure() {
+		if (this.scoreMarks.length === 1) return; // ignore failures on the initial score mark
 		this.latestScoreMark.failures++;
 		if (this.latestScoreMark.failures === 3) {
 			this.latestScoreMark.cancelled = true;
