@@ -55,6 +55,14 @@ describe("Ladder", () => {
 		it("must add at least 500 on the first score", () => {
 			expect(() => ladder.addScore(400)).toThrowError();
 		});
+
+		it("must add at least 500 if back to the first score", () => {
+			ladder.addScore(1000);
+			ladder.addFailure();
+			ladder.addFailure();
+			ladder.addFailure();
+			expect(() => ladder.addScore(400)).toThrowError();
+		});
 	});
 
 	it("can add a failure", () => {
@@ -89,6 +97,20 @@ describe("Ladder", () => {
 			ladder.addFailure();
 			ladder.addScore(100);
 			expect(ladder.score).toBe(1100);
+		});
+	});
+
+	describe("when someone scores", () => {
+		it("has no effect is the score is different", () => {
+			ladder.addScore(1000);
+			ladder.someoneScored(600);
+			expect(ladder.score).toBe(1000);
+		});
+
+		it("cancels the score if it is the same", () => {
+			ladder.addScore(1000);
+			ladder.someoneScored(1000);
+			expect(ladder.score).toBe(0);
 		});
 	});
 });

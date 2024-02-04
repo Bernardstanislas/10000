@@ -41,8 +41,14 @@ export class Ladder {
 		}
 	}
 
+	someoneScored(score: number) {
+		if (score !== 0 && score === this.score) {
+			this.latestScoreMark.cancelled = true;
+		}
+	}
+
 	private get rolling() {
-		return this.scoreMarks.length > 1;
+		return this.activeScoreMarks.length > 1;
 	}
 
 	get score() {
@@ -50,8 +56,10 @@ export class Ladder {
 	}
 
 	get latestScoreMark() {
-		return this.scoreMarks
-			.filter((scoreMark) => !scoreMark.cancelled)
-			.slice(-1)[0];
+		return this.activeScoreMarks.slice(-1)[0];
+	}
+
+	private get activeScoreMarks() {
+		return this.scoreMarks.filter((scoreMark) => !scoreMark.cancelled);
 	}
 }

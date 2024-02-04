@@ -11,6 +11,10 @@ export class Game {
 
 	addScore(score: number) {
 		this.currentLadder.addScore(score);
+		for (const ladder of this.ladders) {
+			if (ladder === this.currentLadder) continue;
+			ladder.someoneScored(this.currentLadder.score);
+		}
 		this.cyclePlayers();
 	}
 

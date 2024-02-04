@@ -31,8 +31,8 @@ describe("Game", () => {
 		expect(game.currentLadder.score).toBe(0); // Alice hasn't scored yet
 		game.addScore(800);
 		expect(game.currentLadder.score).toBe(600); // Bob has scored previously
-		game.addScore(200);
-		expect(game.currentLadder.score).toBe(800); // Alice has again
+		game.addScore(300);
+		expect(game.currentLadder.score).toBe(800); // Alice has scored previously
 	});
 
 	it("can add a failure", () => {
@@ -42,5 +42,12 @@ describe("Game", () => {
 		expect(game.currentLadder.latestScoreMark.failures).toBe(0); // Alice hasn't failed
 		game.addScore(100); // Alice scores again
 		expect(game.currentLadder.latestScoreMark.failures).toBe(1); // Bob has failed previously
+	});
+
+	it("cancels other players' score mark if identical", () => {
+		game.addScore(600); // Bob scores
+		game.addScore(800); // Alice scores
+		game.addScore(200); // Bob scores
+		expect(game.currentLadder.score).toBe(0); // Bob has cancelled Alice's initial 800 score
 	});
 });
