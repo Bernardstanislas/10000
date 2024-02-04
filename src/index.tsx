@@ -8,6 +8,8 @@ import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { HTTPException } from "hono/http-exception";
 import { ErrorInfo } from "./presentation/components/ErrorInfo";
+import { Score } from "./presentation/components/Score";
+import { Controls } from "./presentation/components/Controls";
 
 const app = new Hono();
 
@@ -57,14 +59,20 @@ app.post("/score", zValidator("form", addScoreSchema), async (c) => {
 	const { game: id, score } = c.req.valid("form");
 
 	const game = await gameService.addScore(id, score);
-	return c.render(<Game game={game} />);
+	c.header("HX-Trigger", "update-score");
+	return c.render(
+		<Controls currentPlayer={game.currentPlayer.name} gameId={game.id} />,
+	);
 });
 
 app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 	const { game: id } = c.req.valid("form");
 
 	const game = await gameService.addFailure(id);
-	return c.render(<Game game={game} />);
+	c.header("HX-Trigger", "update-score");
+	return c.render(
+		<Controls currentPlayer={game.currentPlayer.name} gameId={game.id} />,
+	);
 });
 
 app.get("/", async (c) => {
@@ -75,6 +83,12 @@ app.get("/game/:id", async (c) => {
 	const id = c.req.param("id");
 	const game = await gameRepository.load(id);
 	return c.render(<Game game={game} />);
+});
+
+app.get("/partials/score/:id", async (c) => {
+	const id = c.req.param("id");
+	const game = await gameRepository.load(id);
+	return c.render(<Score game={game} />);
 });
 
 app.onError((err, c) => {

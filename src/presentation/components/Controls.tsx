@@ -7,15 +7,15 @@ type Props = {
 
 export const Controls: FC<Props> = ({ currentPlayer, gameId }) => {
 	return (
-		<>
+		<div id="controls">
 			<h4>{currentPlayer}'s turn</h4>
 			<form>
 				<input type="hidden" name="game" value={gameId} />
-				<input type="number" id="score" name="score" />
+				<input type="number" name="score" />
 				<button
 					hx-post="/score"
 					hx-trigger="click"
-					hx-target="#game"
+					hx-target="#controls"
 					hx-swap="outerHTML"
 					type="button"
 				>
@@ -24,13 +24,13 @@ export const Controls: FC<Props> = ({ currentPlayer, gameId }) => {
 				<button
 					hx-post="/failure"
 					hx-trigger="click"
-					hx-target="#game"
+					hx-target="#controls"
 					hx-swap="outerHTML"
 					type="button"
 				>
 					Add failure
 				</button>
 			</form>
-		</>
+		</div>
 	);
 };

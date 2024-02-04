@@ -9,7 +9,12 @@ export const Score: FC<Props> = ({ game }) => {
 		return Math.max(max, ladder.scoreMarks.length);
 	}, 0);
 	return (
-		<table>
+		<table
+			hx-target="this"
+			hx-get={`/partials/score/${game.id}`}
+			hx-trigger="update-score from:body"
+			hx-swap="outerHTML"
+		>
 			<tr>
 				{game.ladders.map((ladder) => {
 					return <th scope="col">{ladder.player.name}</th>;
