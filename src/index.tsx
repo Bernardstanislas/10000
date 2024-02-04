@@ -41,7 +41,7 @@ await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 
-app.use("", async (c, next) => {
+app.use("/game/*", async (c, next) => {
 	c.setRenderer((content) => {
 		return c.html(<Layout>{content}</Layout>);
 	});
@@ -68,6 +68,12 @@ app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 });
 
 app.get("/", async (c) => {
+	return c.redirect(`/game/${game.id}`);
+});
+
+app.get("/game/:id", async (c) => {
+	const id = c.req.param("id");
+	const game = await gameRepository.load(id);
 	return c.render(<Game game={game} />);
 });
 
