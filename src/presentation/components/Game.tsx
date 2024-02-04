@@ -5,23 +5,38 @@ type Props = {
 	game: GameType;
 };
 export const Game: FC<Props> = ({ game }) => {
+	const biggestLadder = game.ladders.reduce((max, ladder) => {
+		return Math.max(max, ladder.scoreMarks.length);
+	}, 0);
 	return (
-		<>
-			<h1>Game {game.id}</h1>
-			<ul>
+		<table>
+			<tr>
 				{game.ladders.map((ladder) => {
-					return (
-						<li>
-							{ladder.player.name}:
-							<ul>
-								{ladder.scoreMarks.map((scoreMark) => {
-									return <li>{scoreMark.score}</li>;
-								})}
-							</ul>
-						</li>
-					);
+					return <th scope="col">{ladder.player.name}</th>;
 				})}
-			</ul>
-		</>
+			</tr>
+			{Array.from({ length: biggestLadder }).map((_, rowIndex) => {
+				return (
+					<tr>
+						{game.ladders.map((ladder) => {
+							return (
+								<td
+									style={{
+										textDecoration: ladder.scoreMarks[rowIndex]?.cancelled
+											? "line-through"
+											: "none",
+									}}
+								>
+									{ladder.scoreMarks[rowIndex]?.score}{" "}
+									{Array.from({
+										length: ladder.scoreMarks[rowIndex]?.failures || 0,
+									}).map((_) => "×")}
+								</td>
+							);
+						})}
+					</tr>
+				);
+			})}
+		</table>
 	);
 };
