@@ -41,7 +41,7 @@ describe("Ladder", () => {
 		ladder.addScore(100);
 		ladder.addFailure();
 		expect(ladder.latestScoreMark.score).toBe(100);
-		expect(ladder.latestScoreMark.fails).toBe(1);
+		expect(ladder.latestScoreMark.failures).toBe(1);
 	});
 
 	describe("can compute the score", () => {
@@ -50,6 +50,25 @@ describe("Ladder", () => {
 			ladder.addScore(100);
 			ladder.addScore(100);
 			expect(ladder.score).toBe(300);
+		});
+
+		it("in a mixed scenario", () => {
+			ladder.addScore(100);
+			ladder.addScore(100);
+			ladder.addFailure();
+			ladder.addScore(100);
+			ladder.addFailure();
+			expect(ladder.score).toBe(300);
+		});
+
+		it("in a mixed scenario with cancelled scores", () => {
+			ladder.addScore(100);
+			ladder.addScore(100);
+			ladder.addFailure();
+			ladder.addFailure();
+			ladder.addFailure();
+			ladder.addScore(100);
+			expect(ladder.score).toBe(200);
 		});
 	});
 });

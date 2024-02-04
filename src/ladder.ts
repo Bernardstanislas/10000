@@ -2,7 +2,7 @@ import type { Player } from "./player";
 
 type ScoreMark = {
 	score: number;
-	fails: number;
+	failures: number;
 	cancelled: boolean;
 };
 
@@ -14,21 +14,28 @@ export class Ladder {
 	addScore(score: number) {
 		if (score % 100 !== 0) throw new Error("Score must be a multiple of 100");
 		if (score <= 0) throw new Error("Score must be positive");
-		this.scoreMarks.push({ score, fails: 0, cancelled: false });
+		const newTotalScore = this.score + score;
+		this.scoreMarks.push({
+			score: newTotalScore,
+			failures: 0,
+			cancelled: false,
+		});
 	}
 
 	addFailure() {
-		this.latestScoreMark.fails++;
+		this.latestScoreMark.failures++;
+		if (this.latestScoreMark.failures === 3) {
+			this.latestScoreMark.cancelled = true;
+		}
 	}
 
 	get score() {
-		return this.scoreMarks.reduce((acc, scoreMark) => acc + scoreMark.score, 0);
+		return this.latestScoreMark?.score || 0;
 	}
 
 	get latestScoreMark() {
-		const activeScoreMarks = this.scoreMarks.filter(
-			(scoreMark) => !scoreMark.cancelled,
-		);
-		return activeScoreMarks[activeScoreMarks.length - 1];
+		return this.scoreMarks
+			.filter((scoreMark) => !scoreMark.cancelled)
+			.slice(-1)[0];
 	}
 }
