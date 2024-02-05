@@ -28,8 +28,9 @@ const addFailureSchema = z.object({
 
 const bob = new Player("Bob");
 const alice = new Player("Alice");
+const lucien = new Player("Lucien");
 
-const game = await gameService.createGame([bob, alice]);
+const game = await gameService.createGame([bob, alice, lucien]);
 await gameService.addScore(game.id, 1800);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
