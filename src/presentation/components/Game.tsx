@@ -7,7 +7,7 @@ type Props = {
 	game: GameType;
 };
 export const Game: FC<Props> = ({ game }) => (
-	<div id="game" class="max-w-3xl mx-auto lg:my-8 px-4">
+	<div id="game" class="max-w-3xl mx-auto lg:my-8 px-4 text-gray-800">
 		<Score game={game} />
 		<Controls game={game} />
 	</div>

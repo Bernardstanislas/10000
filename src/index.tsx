@@ -29,15 +29,16 @@ const addFailureSchema = z.object({
 const bob = new Player("Bob");
 const alice = new Player("Alice");
 const lucien = new Player("Lucien");
+const bruno = new Player("Bruno");
 
-const game = await gameService.createGame([bob, alice, lucien]);
+const game = await gameService.createGame([bob, alice, lucien, bruno]);
 await gameService.addScore(game.id, 1800);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 await gameService.addScore(game.id, 2000);
-await gameService.addScore(game.id, 200);
+await gameService.addScore(game.id, 800);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
 await gameService.addFailure(game.id);
