@@ -18,27 +18,39 @@ export const Controls: FC<Props> = ({ game }) => {
 	return (
 		<div id="controls">
 			<h4>{game.currentPlayer.name}'s turn</h4>
-			<form>
+			<form x-data="{score:100}">
 				<input type="hidden" name="game" value={game.id} />
-				<input type="number" name="score" min="100" step="100" />
-				<button
-					hx-post="/score"
-					hx-trigger="click"
-					hx-target="#controls"
-					hx-swap="outerHTML"
-					type="button"
-				>
-					Add score
-				</button>
-				<button
-					hx-post="/failure"
-					hx-trigger="click"
-					hx-target="#controls"
-					hx-swap="outerHTML"
-					type="button"
-				>
-					Add failure
-				</button>
+				<p>
+					<input
+						type="range"
+						name="score"
+						min="100"
+						step="100"
+						max="10000"
+						x-model="score"
+						style={{ width: "100%", maxWidth: "300px" }}
+					/>
+				</p>
+				<p>
+					<button
+						hx-post="/score"
+						hx-trigger="click"
+						hx-target="#controls"
+						hx-swap="outerHTML"
+						type="button"
+					>
+						+ <span x-text="score" />
+					</button>
+					<button
+						hx-post="/failure"
+						hx-trigger="click"
+						hx-target="#controls"
+						hx-swap="outerHTML"
+						type="button"
+					>
+						Fail
+					</button>
+				</p>
 			</form>
 		</div>
 	);

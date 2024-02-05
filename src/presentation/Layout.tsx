@@ -13,6 +13,10 @@ export const Layout: FC = (props) => {
 					integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
 					crossorigin="anonymous"
 				/>
+				<script
+					defer
+					src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+				/>
 				{html`<style>
 						table, th, td {
 							border:1px solid black;
