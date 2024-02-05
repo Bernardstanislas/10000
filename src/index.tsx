@@ -10,6 +10,7 @@ import { HTTPException } from "hono/http-exception";
 import { ErrorInfo } from "./presentation/components/ErrorInfo";
 import { Score } from "./presentation/components/Score";
 import { Controls } from "./presentation/components/Controls";
+import { GameNotFoundError } from "./infra/game-not-found.error";
 
 const app = new Hono();
 
@@ -88,6 +89,9 @@ app.get("/partials/score/:id", async (c) => {
 });
 
 app.onError((err, c) => {
+	if (err instanceof GameNotFoundError) {
+		return c.redirect("/");
+	}
 	c.header("HX-Retarget", "#error");
 	return c.render(<ErrorInfo error={err.message} />);
 });

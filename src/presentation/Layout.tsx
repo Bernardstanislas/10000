@@ -17,13 +17,9 @@ export const Layout: FC = (props) => {
 					defer
 					src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 				/>
-				{html`<style>
-						table, th, td {
-							border:1px solid black;
-						}
-					  </style>`}
+				<script src="https://cdn.tailwindcss.com" />
 			</head>
-			<body class="bg-neutral-300 container mx-auto">
+			<body>
 				{props.children}
 				<ErrorInfo error="" />
 			</body>
