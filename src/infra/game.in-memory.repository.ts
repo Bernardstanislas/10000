@@ -1,5 +1,6 @@
 import type { Game } from "../domain/game";
 import type { GameRepositoryPort } from "../domain/game.repository.port";
+import { GameNotFoundError } from "./game-not-found.error";
 
 export class InMemoryGameRepository implements GameRepositoryPort {
 	private readonly games: Map<string, Game> = new Map();
@@ -12,7 +13,7 @@ export class InMemoryGameRepository implements GameRepositoryPort {
 	async load(id: string): Promise<Game> {
 		const game = this.games.get(id);
 		if (game === undefined) {
-			throw new Error(`Game not found: ${id}`);
+			throw new GameNotFoundError(id);
 		}
 		return game;
 	}
