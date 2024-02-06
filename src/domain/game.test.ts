@@ -8,7 +8,7 @@ describe("Game", () => {
 	let game: Game;
 
 	beforeEach(() => {
-		game = new Game([bob, alice]);
+		game = Game.create([bob, alice]);
 	});
 
 	it("initiates player ladders", () => {

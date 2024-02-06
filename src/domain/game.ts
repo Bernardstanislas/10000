@@ -3,14 +3,16 @@ import type { Player } from "./player";
 import { v4 } from "uuid";
 
 export class Game {
-	readonly ladders: Ladder[];
-	private currentPlayerIndex = 0;
-	readonly id: string;
-
-	constructor(players: Player[]) {
-		this.ladders = players.map((player) => new Ladder(player));
-		this.id = v4();
+	static create(players: Player[]) {
+		const ladders = players.map((player) => new Ladder(player));
+		return new Game(ladders);
 	}
+
+	private constructor(
+		readonly ladders: Ladder[],
+		readonly id: string = v4(),
+		private currentPlayerIndex = 0,
+	) {}
 
 	addScore(score: number) {
 		this.checkForFinishedGame();

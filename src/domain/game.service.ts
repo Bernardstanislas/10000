@@ -6,7 +6,7 @@ export class GameService {
 	constructor(private readonly gameRepository: GameRepositoryPort) {}
 
 	async createGame(players: Player[]) {
-		const game = new Game(players);
+		const game = Game.create(players);
 		return this.gameRepository.save(game);
 	}
 
