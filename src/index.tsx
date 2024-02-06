@@ -20,6 +20,7 @@ const gameService = new GameService(gameRepository);
 const addScoreSchema = z.object({
 	game: z.string(),
 	score: z.string().pipe(z.coerce.number().min(100).max(10000)),
+	slider: z.string().optional().pipe(z.coerce.number().min(0).max(499)),
 });
 
 const addFailureSchema = z.object({
@@ -59,11 +60,11 @@ app.post("/game", async (c) => {
 });
 
 app.post("/score", zValidator("form", addScoreSchema), async (c) => {
-	const { game: id, score } = c.req.valid("form");
+	const { game: id, score, slider } = c.req.valid("form");
 
 	const game = await gameService.addScore(id, score);
 	c.header("HX-Trigger", "update-score");
-	return c.render(<Controls game={game} />);
+	return c.render(<Controls game={game} slider={slider} />);
 });
 
 app.post("/failure", zValidator("form", addFailureSchema), async (c) => {

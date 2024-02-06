@@ -5,9 +5,10 @@ import { html } from "hono/html";
 
 type Props = {
 	game: Game;
+	slider?: number;
 };
 
-export const Controls: FC<Props> = ({ game }) => {
+export const Controls: FC<Props> = ({ game, slider }) => {
 	if (game.finished) {
 		return (
 			<div id="controls">
@@ -26,7 +27,7 @@ export const Controls: FC<Props> = ({ game }) => {
 					return 100 * Math.ceil(1 + 99 * (Math.exp(slope * sliderInput / steps) - 1) / (Math.exp(slope) - 1))
 				}
 			</script>`}
-			<form x-data="{slider:0}">
+			<form x-data={`{slider: ${slider ?? 0}}`}>
 				<div class="flex justify-center items-center gap-x-2">
 					<h4 class="text-strong text-center font-medium px-2">
 						{game.currentPlayer.name}'s turn
@@ -61,6 +62,7 @@ export const Controls: FC<Props> = ({ game }) => {
 						step="1"
 						max="499"
 						x-model="slider"
+						name="slider"
 						class="flex-1 h-8 mx-4 my-2 appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-black [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black [&::-webkit-slider-thumb]:-translate-y-1/2"
 					/>
 				</div>
