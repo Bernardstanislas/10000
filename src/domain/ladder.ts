@@ -10,15 +10,20 @@ const MINIMUM_FIRST_SCORE = 500;
 const MAXIMUM_SCORE = 10000;
 
 export class Ladder {
-	readonly scoreMarks: ScoreMark[] = [
-		{
-			score: 0,
-			failures: 0,
-			cancelled: false,
-		},
-	];
+	static create(player: Player) {
+		return new Ladder(player);
+	}
 
-	constructor(readonly player: Player) {}
+	private constructor(
+		readonly player: Player,
+		readonly scoreMarks: ScoreMark[] = [
+			{
+				score: 0,
+				failures: 0,
+				cancelled: false,
+			},
+		],
+	) {}
 
 	addScore(score: number) {
 		if (score % 100 !== 0) throw new Error("Score must be a multiple of 100");

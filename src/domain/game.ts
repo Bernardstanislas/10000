@@ -4,7 +4,7 @@ import { v4 } from "uuid";
 
 export class Game {
 	static create(players: Player[]) {
-		const ladders = players.map((player) => new Ladder(player));
+		const ladders = players.map((player) => Ladder.create(player));
 		return new Game(ladders);
 	}
 

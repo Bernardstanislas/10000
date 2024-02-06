@@ -7,7 +7,7 @@ describe("Ladder", () => {
 	let ladder: Ladder;
 
 	beforeEach(() => {
-		ladder = new Ladder(bob);
+		ladder = Ladder.create(bob);
 	});
 
 	it("can be created", () => {
