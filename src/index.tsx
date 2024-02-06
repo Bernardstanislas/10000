@@ -32,31 +32,11 @@ const alice = new Player("Alice");
 const lucien = new Player("Lucien");
 const bruno = new Player("Bruno");
 
-const game = await gameService.createGame([bob, alice, lucien, bruno]);
-await gameService.addScore(game.id, 1800);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-await gameService.addScore(game.id, 2000);
-await gameService.addScore(game.id, 800);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-await gameService.addFailure(game.id);
-
-app.use("/game/*", async (c, next) => {
+app.use("/games/*", async (c, next) => {
 	c.setRenderer((content) => {
 		return c.html(<Layout>{content}</Layout>);
 	});
 	await next();
-});
-
-app.post("/game", async (c) => {
-	const game = await gameService.createGame([bob, alice]);
-	return c.render(<Game game={game} />);
 });
 
 app.post("/score", zValidator("form", addScoreSchema), async (c) => {
@@ -80,7 +60,7 @@ app.get("/", async (c) => {
 	return c.render(<Games games={games} />);
 });
 
-app.get("/game/:id", async (c) => {
+app.get("/games/:id", async (c) => {
 	const id = c.req.param("id");
 	const game = await gameRepository.load(id);
 	return c.render(<Game game={game} />);
@@ -92,8 +72,9 @@ app.get("/partials/score/:id", async (c) => {
 	return c.render(<Score game={game} />);
 });
 
-app.onError((err, c) => {
+app.onError(async (err, c) => {
 	if (err instanceof GameNotFoundError) {
+		await gameService.createGame([bob, alice, lucien, bruno]);
 		return c.redirect("/");
 	}
 	c.header("HX-Retarget", "#error");

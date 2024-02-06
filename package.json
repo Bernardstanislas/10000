@@ -3,15 +3,18 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.tsx",
+    "dev": "wrangler dev src/index.tsx --port 3000 --live-reload",
+    "deploy": "wrangler deploy --minify src/index.tsx",
     "check-lint": "biome lint src",
     "check-format": "biome format src",
     "test": "vitest"
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
+    "@cloudflare/workers-types": "4.20240129.0",
     "@types/bun": "latest",
-    "vitest": "^1.2.2"
+    "vitest": "^1.2.2",
+    "wrangler": "3.25.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
