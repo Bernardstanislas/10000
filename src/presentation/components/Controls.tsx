@@ -1,6 +1,7 @@
 import type { FC } from "hono/jsx";
 import type { Game } from "../../domain/game";
 import { css } from "hono/css";
+import { html } from "hono/html";
 
 type Props = {
 	game: Game;
@@ -21,16 +22,22 @@ export const Controls: FC<Props> = ({ game }) => {
 			<h4 class="text-strong text-center font-medium">
 				{game.currentPlayer.name}'s turn
 			</h4>
-			<form x-data="{score:100}">
+			{html`<script>
+				function extrapolateScore(sliderInput) {
+					var slope = 2;
+					var steps = 500
+					return 100 * Math.ceil(1 + 99 * (Math.exp(slope * sliderInput / steps) - 1) / (Math.exp(slope) - 1))
+				}
+			</script>`}
+			<form x-data="{slider:0}">
 				<input type="hidden" name="game" value={game.id} />
 				<div class="flex">
 					<input
 						type="range"
-						name="score"
-						min="100"
-						step="100"
-						max="10000"
-						x-model="score"
+						min="0"
+						step="1"
+						max="499"
+						x-model="slider"
 						class="flex-1 h-8 mx-4 my-2 appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-black [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black [&::-webkit-slider-thumb]:-translate-y-1/2"
 					/>
 				</div>
@@ -43,7 +50,7 @@ export const Controls: FC<Props> = ({ game }) => {
 						type="button"
 						class="min-w-40 text-sm font-medium border-gray-800 border h-10 px-4 py-2 hover:bg-gray-50"
 					>
-						+ <span x-text="score" />
+						+ <span x-text="extrapolateScore(slider)" />
 					</button>
 					<button
 						hx-post="/failure"
