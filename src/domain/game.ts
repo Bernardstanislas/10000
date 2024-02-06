@@ -8,11 +8,25 @@ export class Game {
 		return new Game(ladders);
 	}
 
+	static fromSerialized(serialized: string) {
+		const game: ReturnType<Game["toObject"]> = JSON.parse(serialized);
+
+		return new Game(
+			game.ladders.map((ladder) => Ladder.fromObject(ladder)),
+			game.id,
+			game.currentPlayerIndex,
+		);
+	}
+
 	private constructor(
 		readonly ladders: Ladder[],
 		readonly id: string = v4(),
 		private currentPlayerIndex = 0,
 	) {}
+
+	serialize() {
+		return JSON.stringify(this.toObject());
+	}
 
 	addScore(score: number) {
 		this.checkForFinishedGame();
@@ -60,5 +74,13 @@ export class Game {
 			if (ladder === this.currentLadder) continue;
 			ladder.someoneScored(this.currentLadder.score);
 		}
+	}
+
+	private toObject() {
+		return {
+			id: this.id,
+			currentPlayerIndex: this.currentPlayerIndex,
+			ladders: this.ladders.map((ladder) => ladder.toObject()),
+		};
 	}
 }

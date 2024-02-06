@@ -76,4 +76,11 @@ describe("Game", () => {
 		expect(() => game.addScore(1000)).toThrowError();
 		expect(() => game.addFailure()).toThrowError();
 	});
+
+	it("can be serialized and deserialized", () => {
+		const serialized = game.serialize();
+		const deserialized = Game.fromSerialized(serialized);
+
+		expect(deserialized).toEqual(game);
+	});
 });

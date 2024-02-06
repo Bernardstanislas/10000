@@ -1,4 +1,4 @@
-import type { Player } from "./player";
+import { Player } from "./player";
 
 type ScoreMark = {
 	score: number;
@@ -14,6 +14,10 @@ export class Ladder {
 		return new Ladder(player);
 	}
 
+	static fromObject(ladderObject: ReturnType<Ladder["toObject"]>) {
+		return new Ladder(new Player(ladderObject.player), ladderObject.scoreMarks);
+	}
+
 	private constructor(
 		readonly player: Player,
 		readonly scoreMarks: ScoreMark[] = [
@@ -24,6 +28,13 @@ export class Ladder {
 			},
 		],
 	) {}
+
+	toObject() {
+		return {
+			player: this.player.name,
+			scoreMarks: this.scoreMarks,
+		};
+	}
 
 	addScore(score: number) {
 		if (score % 100 !== 0) throw new Error("Score must be a multiple of 100");

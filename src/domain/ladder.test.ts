@@ -120,4 +120,10 @@ describe("Ladder", () => {
 			expect(ladder.score).toBe(0);
 		});
 	});
+
+	it("can be serialized as object", () => {
+		const serializedObject = ladder.toObject();
+		const newLadder = Ladder.fromObject(serializedObject);
+		expect(newLadder).toEqual(ladder);
+	});
 });
