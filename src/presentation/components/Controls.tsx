@@ -19,9 +19,6 @@ export const Controls: FC<Props> = ({ game }) => {
 	}
 	return (
 		<div id="controls" class="my-4">
-			<h4 class="text-strong text-center font-medium">
-				{game.currentPlayer.name}'s turn
-			</h4>
 			{html`<script>
 				function extrapolateScore(sliderInput) {
 					var slope = 2;
@@ -30,6 +27,32 @@ export const Controls: FC<Props> = ({ game }) => {
 				}
 			</script>`}
 			<form x-data="{slider:0}">
+				<div class="flex justify-center items-center gap-x-2">
+					<h4 class="text-strong text-center font-medium px-2">
+						{game.currentPlayer.name}'s turn
+					</h4>
+					<button
+						hx-post="/score"
+						hx-trigger="click"
+						hx-target="#controls"
+						hx-swap="outerHTML"
+						type="button"
+						class="flex-1 max-w-40 text-sm font-medium border-gray-800 border h-10 px-4 py-2 hover:bg-gray-50"
+					>
+						+ <span x-text="extrapolateScore(slider)" />
+					</button>
+					<button
+						hx-post="/failure"
+						hx-trigger="click"
+						hx-target="#controls"
+						hx-swap="outerHTML"
+						type="button"
+						class="flex-1 max-w-40 text-sm font-medium border-gray-800 border h-10 px-4 py-2 hover:bg-gray-50"
+					>
+						Fail
+					</button>
+				</div>
+				<input type="hidden" name="score" x-model="extrapolateScore(slider)" />
 				<input type="hidden" name="game" value={game.id} />
 				<div class="flex">
 					<input
@@ -40,28 +63,6 @@ export const Controls: FC<Props> = ({ game }) => {
 						x-model="slider"
 						class="flex-1 h-8 mx-4 my-2 appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:bg-black [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black [&::-webkit-slider-thumb]:-translate-y-1/2"
 					/>
-				</div>
-				<div class="flex justify-around">
-					<button
-						hx-post="/score"
-						hx-trigger="click"
-						hx-target="#controls"
-						hx-swap="outerHTML"
-						type="button"
-						class="min-w-40 text-sm font-medium border-gray-800 border h-10 px-4 py-2 hover:bg-gray-50"
-					>
-						+ <span x-text="extrapolateScore(slider)" />
-					</button>
-					<button
-						hx-post="/failure"
-						hx-trigger="click"
-						hx-target="#controls"
-						hx-swap="outerHTML"
-						type="button"
-						class="min-w-40 text-sm font-medium border-gray-800 border h-10 px-4 py-2 hover:bg-gray-50"
-					>
-						Fail
-					</button>
 				</div>
 			</form>
 		</div>
