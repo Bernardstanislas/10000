@@ -51,6 +51,19 @@ describe("Game", () => {
 		expect(game.currentLadder.score).toBe(0); // Bob has cancelled Alice's initial 800 score
 	});
 
+	it("cancels other players' score mark if identical when falling back to a previous score", () => {
+		game.addScore(1200); // Bob scores
+		game.addScore(900); // Alice scores
+		game.addScore(200); // Bob scores
+		game.addScore(100); // Alice scores
+		game.addFailure(); // Bob fails
+		game.addScore(100); // Alice scores
+		game.addFailure(); // Bob fails again
+		game.addScore(100); // Alice scores
+		game.addFailure(); // Bob fails again thrice, falling back to 1200, cancelling Alice's current 1200 score
+		expect(game.currentLadder.score).toBe(1100); // Bob has cancelled Alice's 1200, she falls to 1100
+	});
+
 	it("finishes when a player reaches 10000", () => {
 		game.addScore(1000); // Bob scores
 		game.addScore(10000); // Alice scores

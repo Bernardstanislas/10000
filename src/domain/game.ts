@@ -15,16 +15,14 @@ export class Game {
 	addScore(score: number) {
 		this.checkForFinishedGame();
 		this.currentLadder.addScore(score);
-		for (const ladder of this.ladders) {
-			if (ladder === this.currentLadder) continue;
-			ladder.someoneScored(this.currentLadder.score);
-		}
+		this.notifyOtherPlayersOfNewScore();
 		this.cyclePlayers();
 	}
 
 	addFailure() {
 		this.checkForFinishedGame();
 		this.currentLadder.addFailure();
+		this.notifyOtherPlayersOfNewScore();
 		this.cyclePlayers();
 	}
 
@@ -52,6 +50,13 @@ export class Game {
 	private checkForFinishedGame() {
 		if (this.finished) {
 			throw new Error("Game has finished");
+		}
+	}
+
+	private notifyOtherPlayersOfNewScore() {
+		for (const ladder of this.ladders) {
+			if (ladder === this.currentLadder) continue;
+			ladder.someoneScored(this.currentLadder.score);
 		}
 	}
 }
