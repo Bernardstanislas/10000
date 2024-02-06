@@ -17,4 +17,8 @@ export class InMemoryGameRepository implements GameRepositoryPort {
 		}
 		return game;
 	}
+
+	async list(): Promise<Game[]> {
+		return Array.from(this.games.values());
+	}
 }

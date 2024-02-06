@@ -6,11 +6,11 @@ import { Layout } from "./presentation/Layout";
 import { Game } from "./presentation/components/Game";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { HTTPException } from "hono/http-exception";
 import { ErrorInfo } from "./presentation/components/ErrorInfo";
 import { Score } from "./presentation/components/Score";
 import { Controls } from "./presentation/components/Controls";
 import { GameNotFoundError } from "./infra/game-not-found.error";
+import { Games } from "./presentation/pages/Home";
 
 const app = new Hono();
 
@@ -76,7 +76,8 @@ app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 });
 
 app.get("/", async (c) => {
-	return c.redirect(`/game/${game.id}`);
+	const games = await gameRepository.list();
+	return c.render(<Games games={games} />);
 });
 
 app.get("/game/:id", async (c) => {
