@@ -12,7 +12,7 @@ import { Controls } from "./presentation/components/Controls";
 import { GameNotFoundError } from "./infra/game-not-found.error";
 import { Games } from "./presentation/pages/Home";
 
-const app = new Hono();
+const app = new Hono<{ Bindings: Bindings }>();
 
 const gameRepository = new InMemoryGameRepository();
 const gameService = new GameService(gameRepository);
