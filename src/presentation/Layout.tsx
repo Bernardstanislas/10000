@@ -15,16 +15,9 @@ export const Layout: FC = (props) => {
 						name="viewport"
 						content="width=device-width, initial-scale=1.0"
 					/>
-					<script
-						src="https://unpkg.com/htmx.org@1.9.10"
-						integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-						crossorigin="anonymous"
-					/>
-					<script
-						defer
-						src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-					/>
-					<script src="https://cdn.tailwindcss.com" />
+					<script src="/static/htmx.min.js" />
+					<script src="/static/alpine.min.js" defer />
+					<link href="/static/style.css" rel="stylesheet" />
 				</head>
 				<body>
 					{props.children}

@@ -4,6 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev src/index.tsx --port 3000 --live-reload",
+    "build": "tailwindcss -i ./src/presentation/style.css -o ./assets/static/style.css --minify",
+    "predeploy": "bun run build",
     "deploy": "wrangler deploy --minify src/index.tsx",
     "check-lint": "biome lint src",
     "check-format": "biome format src",
@@ -13,6 +15,7 @@
     "@biomejs/biome": "1.5.3",
     "@cloudflare/workers-types": "^4.20240129.0",
     "@types/bun": "latest",
+    "tailwindcss": "^3.4.1",
     "vitest": "^1.2.2",
     "wrangler": "3.25.0"
   },

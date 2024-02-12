@@ -4,6 +4,7 @@ import { Player } from "./domain/player";
 import { Layout } from "./presentation/Layout";
 import { Game } from "./presentation/components/Game";
 import { z } from "zod";
+import { serveStatic } from "hono/cloudflare-workers";
 import { zValidator } from "@hono/zod-validator";
 import { ErrorInfo } from "./presentation/components/ErrorInfo";
 import { Score } from "./presentation/components/Score";
@@ -35,6 +36,8 @@ const bob = new Player("Bob");
 const alice = new Player("Alice");
 const lucien = new Player("Lucien");
 const bruno = new Player("Bruno");
+
+app.use("/static/*", serveStatic());
 
 app.use("/games/*", async (c, next) => {
 	c.setRenderer((content) => {
