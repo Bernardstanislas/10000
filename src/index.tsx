@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { InMemoryGameRepository } from "./infra/game.in-memory.repository";
 import { GameService } from "./domain/game.service";
 import { Player } from "./domain/player";
 import { Layout } from "./presentation/Layout";
@@ -11,11 +10,16 @@ import { Score } from "./presentation/components/Score";
 import { Controls } from "./presentation/components/Controls";
 import { GameNotFoundError } from "./infra/game-not-found.error";
 import { Games } from "./presentation/pages/Home";
+import { KVGameRepository } from "./infra/game.kv.repository";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-const gameRepository = new InMemoryGameRepository();
-const gameService = new GameService(gameRepository);
+const services = (env: Bindings) => {
+	const gameRepository = new KVGameRepository(env.games);
+	const gameService = new GameService(gameRepository);
+
+	return { gameService, gameRepository };
+};
 
 const addScoreSchema = z.object({
 	game: z.string(),
@@ -41,7 +45,7 @@ app.use("/games/*", async (c, next) => {
 
 app.post("/score", zValidator("form", addScoreSchema), async (c) => {
 	const { game: id, score, slider } = c.req.valid("form");
-
+	const { gameService } = services(c.env);
 	const game = await gameService.addScore(id, score);
 	c.header("HX-Trigger", "update-score");
 	return c.render(<Controls game={game} slider={slider} />);
@@ -50,30 +54,35 @@ app.post("/score", zValidator("form", addScoreSchema), async (c) => {
 app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 	const { game: id } = c.req.valid("form");
 
+	const { gameService } = services(c.env);
 	const game = await gameService.addFailure(id);
 	c.header("HX-Trigger", "update-score");
 	return c.render(<Controls game={game} />);
 });
 
 app.get("/", async (c) => {
+	const { gameRepository } = services(c.env);
 	const games = await gameRepository.list();
 	return c.render(<Games games={games} />);
 });
 
 app.get("/games/:id", async (c) => {
 	const id = c.req.param("id");
+	const { gameRepository } = services(c.env);
 	const game = await gameRepository.load(id);
 	return c.render(<Game game={game} />);
 });
 
 app.get("/partials/score/:id", async (c) => {
 	const id = c.req.param("id");
+	const { gameRepository } = services(c.env);
 	const game = await gameRepository.load(id);
 	return c.render(<Score game={game} />);
 });
 
 app.onError(async (err, c) => {
 	if (err instanceof GameNotFoundError) {
+		const { gameService } = services(c.env);
 		await gameService.createGame([bob, alice, lucien, bruno]);
 		return c.redirect("/");
 	}
