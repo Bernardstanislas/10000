@@ -6,10 +6,28 @@ To install dependencies:
 bun install
 ```
 
-To run:
+To run in dev mode:
 
 ```bash
-bun run src/index.ts
+bun dev
 ```
 
-This project was created using `bun init` in bun v1.0.21. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+To test:
+
+```bash
+bun test
+```
+
+Deployments are made to Cloudflare workers, so first deployment will ask you to log in to your Cloudflare account.
+
+To deploy:
+
+```bash
+bun run deploy
+```
+
+To build Typescript files locally and check bundle size for example:
+
+```bash
+bun build:local-ts
+```
