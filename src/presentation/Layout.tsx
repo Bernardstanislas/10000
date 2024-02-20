@@ -24,10 +24,14 @@ export const Layout: FC = (props) => {
 					<ErrorInfo error="" />
 				</body>
 				{html`<script>
-				htmx.on("htmx:beforeSend", function (event) {
-					document.getElementById("error").innerHTML = "";
-				});
-			</script>`}
+					htmx.on("htmx:beforeSend", function (event) {
+						document.getElementById("error").innerHTML = "";
+					});
+				</script>`}
+				{html`<script type="module">
+					import posthog from 'https://cdn.jsdelivr.net/npm/posthog-js@1.106.2/+esm'
+					posthog.init('phc_jsrGEJV0wDs8jKMjpM596ONJO9Y6WeHOHyycMIDlyD5', { api_host: 'https://app.posthog.com' })
+				</script>`}
 			</html>
 		</>
 	);
