@@ -1,11 +1,14 @@
 import type { FC } from "hono/jsx";
 import type { Game } from "../../domain/game";
 import { Layout } from "../Layout";
+import type { Player } from "../../domain/player/player";
 
 type Props = {
 	games: Game[];
+	players: Player[];
 };
-export const Games: FC<Props> = ({ games }) => {
+
+export const Home: FC<Props> = ({ games, players }) => {
 	return (
 		<Layout>
 			<h1>Games</h1>
@@ -23,6 +26,17 @@ export const Games: FC<Props> = ({ games }) => {
 					</li>
 				))}
 			</ul>
+			<fieldset class="border border-black p-2">
+				<legend class="px-2">
+					<h2 class="font-medium">Create a new game</h2>
+				</legend>
+				{players.map((player) => (
+					<div>
+						<input type="checkbox" id={player.name} name="players[]" />
+						<label for={player.name}>{player.name}</label>
+					</div>
+				))}
+			</fieldset>
 		</Layout>
 	);
 };

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { GameService } from "./domain/game.service";
-import { Player } from "./domain/player";
+import { Player } from "./domain/player/player";
 import { Layout } from "./presentation/Layout";
 import { Game } from "./presentation/components/Game";
 import { z } from "zod";
@@ -10,8 +10,9 @@ import { ErrorInfo } from "./presentation/components/ErrorInfo";
 import { Score } from "./presentation/components/Score";
 import { Controls } from "./presentation/components/Controls";
 import { GameNotFoundError } from "./infra/game-not-found.error";
-import { Games } from "./presentation/pages/Home";
+import { Home } from "./presentation/pages/Home";
 import { KVGameRepository } from "./infra/game.kv.repository";
+import { createPlayers } from "./domain/player/player.factory";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -66,7 +67,8 @@ app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 app.get("/", async (c) => {
 	const { gameRepository } = services(c.env);
 	const games = await gameRepository.list();
-	return c.render(<Games games={games} />);
+	const players = createPlayers(10);
+	return c.render(<Home games={games} players={players} />);
 });
 
 app.get("/games/:id", async (c) => {
