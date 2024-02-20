@@ -1,5 +1,5 @@
 import { Ladder } from "./ladder";
-import type { Player } from "./player";
+import type { Player } from "./player/player";
 import { v4 } from "uuid";
 
 export class Game {

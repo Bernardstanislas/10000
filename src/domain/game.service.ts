@@ -1,6 +1,6 @@
 import { Game } from "./game";
 import type { GameRepositoryPort } from "./game.repository.port";
-import type { Player } from "./player";
+import type { Player } from "./player/player";
 
 export class GameService {
 	constructor(private readonly gameRepository: GameRepositoryPort) {}

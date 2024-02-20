@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { Player } from "./player";
+import { Player } from "./player/player";
 import { Ladder } from "./ladder";
 
 describe("Ladder", () => {
