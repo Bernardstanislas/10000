@@ -19,7 +19,7 @@ export const Layout: FC = (props) => {
 					<script src="/static/alpine.min.js" defer />
 					<link href="/static/style.css" rel="stylesheet" />
 				</head>
-				<body>
+				<body class="container mx-auto">
 					{props.children}
 					<ErrorInfo error="" />
 				</body>

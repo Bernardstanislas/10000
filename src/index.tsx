@@ -29,6 +29,10 @@ const addScoreSchema = z.object({
 	slider: z.string().optional().pipe(z.coerce.number().min(0).max(499)),
 });
 
+const createGameSchema = z.object({
+	"players[]": z.array(z.string()),
+});
+
 const addFailureSchema = z.object({
 	game: z.string(),
 });
@@ -83,6 +87,18 @@ app.get("/partials/score/:id", async (c) => {
 	const { gameRepository } = services(c.env);
 	const game = await gameRepository.load(id);
 	return c.render(<Score game={game} />);
+});
+
+app.post("/games", async (c) => {
+	const body = await c.req.parseBody();
+	const parsed = await createGameSchema.safeParseAsync(body);
+	if (!parsed.success) {
+		return c.redirect("/");
+	}
+	const { gameService } = services(c.env);
+	const players = parsed.data["players[]"].map((name) => new Player(name));
+	const newGame = await gameService.createGame(players);
+	return c.redirect(`/games/${newGame.id}`);
 });
 
 app.onError(async (err, c) => {

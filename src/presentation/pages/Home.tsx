@@ -26,17 +26,31 @@ export const Home: FC<Props> = ({ games, players }) => {
 					</li>
 				))}
 			</ul>
-			<fieldset class="border border-black p-2">
-				<legend class="px-2">
-					<h2 class="font-medium">Create a new game</h2>
-				</legend>
-				{players.map((player) => (
-					<div>
-						<input type="checkbox" id={player.name} name="players[]" />
-						<label for={player.name}>{player.name}</label>
-					</div>
-				))}
-			</fieldset>
+			<form method="POST" action="/games">
+				<fieldset class="border border-black px-2 m-2">
+					<legend class="px-2">
+						<h2 class="font-medium">Create a new game</h2>
+					</legend>
+					{players.map((player) => (
+						<div>
+							<input
+								type="checkbox"
+								class="mr-1"
+								id={player.name}
+								value={player.name}
+								name="players[]"
+							/>
+							<label for={player.name}>{player.name}</label>
+						</div>
+					))}
+					<button
+						type="submit"
+						class="flex-1 max-w-40 text-sm font-medium border-gray-800 border h-10 my-2 px-4 py-2 hover:bg-gray-50"
+					>
+						Create
+					</button>
+				</fieldset>
+			</form>
 		</Layout>
 	);
 };
