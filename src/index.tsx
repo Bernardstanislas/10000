@@ -71,7 +71,7 @@ app.post("/failure", zValidator("form", addFailureSchema), async (c) => {
 app.get("/", async (c) => {
 	const { gameRepository } = services(c.env);
 	const games = await gameRepository.list();
-	const players = createPlayers(10);
+	const players = createPlayers();
 	return c.render(<Home games={games} players={players} />);
 });
 
