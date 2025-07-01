@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { Player } from "./player/player";
-import { Ladder } from "./ladder";
+import { Player } from "../../src/domain/player/player";
+import { Ladder } from "../../src/domain/ladder";
 
 describe("Ladder", () => {
 	const bob = new Player("Bob");
