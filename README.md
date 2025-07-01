@@ -3,19 +3,19 @@
 To install dependencies:
 
 ```bash
-bun install
+npm install
 ```
 
 To run in dev mode:
 
 ```bash
-bun dev
+npm run dev
 ```
 
 To test:
 
 ```bash
-bun test
+npm test
 ```
 
 Deployments are made to Cloudflare workers, so first deployment will ask you to log in to your Cloudflare account.
@@ -23,11 +23,11 @@ Deployments are made to Cloudflare workers, so first deployment will ask you to 
 To deploy:
 
 ```bash
-bun run deploy
+npm run deploy
 ```
 
 To build Typescript files locally and check bundle size for example:
 
 ```bash
-bun build:local-ts
+npm run build:local-ts
 ```
