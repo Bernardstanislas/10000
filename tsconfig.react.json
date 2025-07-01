@@ -5,8 +5,7 @@
   },
   "include": [
     "src/main.tsx",
-    "src/react/**/*",
-    "src/domain/**/*"
+    "src/react/**/*"
   ],
   "exclude": [
     "src/index.tsx",

@@ -1,15 +1,60 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, type FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useGameService } from '../hooks/useGameService'
 
 function Home() {
-  const [games] = useState([
-    { id: '1', players: ['Alice', 'Bob'], createdAt: new Date() },
-    { id: '2', players: ['Charlie', 'David', 'Eve'], createdAt: new Date() }
-  ])
+  const navigate = useNavigate()
+  const { games, players, loading, error, createGame, clearError } = useGameService()
+  const [selectedPlayers, setSelectedPlayers] = useState<string[]>([])
+  const [submitting, setSubmitting] = useState(false)
+
+  const handlePlayerToggle = (playerName: string) => {
+    setSelectedPlayers(prev => 
+      prev.includes(playerName)
+        ? prev.filter(name => name !== playerName)
+        : [...prev, playerName]
+    )
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    
+    if (selectedPlayers.length < 2) {
+      alert('Please select at least 2 players')
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      const game = await createGame(selectedPlayers)
+      navigate(`/games/${game.id}`)
+    } catch (err) {
+      // Error is handled by the hook
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="container mx-auto max-w-3xl p-4 text-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto max-w-3xl p-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">10000 Game</h1>
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+          <button onClick={clearError} className="ml-2 text-sm underline">
+            Dismiss
+          </button>
+        </div>
+      )}
       
       {/* Game List */}
       <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
@@ -25,10 +70,11 @@ function Home() {
                 className="block p-3 bg-gray-50 hover:bg-gray-100 rounded border"
               >
                 <div className="font-medium">
-                  Game with {game.players.join(', ')}
+                  Game with {game.ladders.map(l => l.player.name).join(', ')}
                 </div>
                 <div className="text-sm text-gray-500">
-                  Created {game.createdAt.toLocaleDateString()}
+                  Current Turn: {game.currentPlayer.name}
+                  {game.finished && ` | Winner: ${game.winner?.name}`}
                 </div>
               </Link>
             ))}
@@ -39,29 +85,32 @@ function Home() {
       {/* Create Game Form */}
       <div className="bg-white rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold mb-4">Create New Game</h2>
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Players:
+              Select Players ({selectedPlayers.length} selected):
             </label>
             <div className="grid grid-cols-2 gap-2">
-              {['Alice', 'Bob', 'Charlie', 'David', 'Eve'].map(name => (
-                <label key={name} className="flex items-center">
+              {players.map(player => (
+                <label key={player.name} className="flex items-center">
                   <input
                     type="checkbox"
-                    value={name}
+                    value={player.name}
+                    checked={selectedPlayers.includes(player.name)}
+                    onChange={() => handlePlayerToggle(player.name)}
                     className="mr-2"
                   />
-                  {name}
+                  {player.name}
                 </label>
               ))}
             </div>
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            disabled={submitting || selectedPlayers.length < 2}
+            className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded"
           >
-            Create Game
+            {submitting ? 'Creating...' : 'Create Game'}
           </button>
         </form>
       </div>
