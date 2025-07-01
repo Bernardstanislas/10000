@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src/main.tsx",
+    "src/react/**/*",
+    "src/domain/**/*"
+  ],
+  "exclude": [
+    "src/index.tsx",
+    "src/presentation/**/*",
+    "src/infra/**/*",
+    "node_modules"
+  ]
+}
